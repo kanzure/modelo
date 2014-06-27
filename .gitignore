@@ -1,0 +1,8 @@
+# editor leftovers
+.*.sw*
+
+# python3 stuff
+__pycache__/
+
+# precompiled python
+*.pyc
