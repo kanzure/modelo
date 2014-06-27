@@ -28,6 +28,7 @@ class MetaModel(type):
                     value_inst = value()
                     value_inst.name = key
                     classdict[key] = value_inst
+
         return super(MetaModel, metacls).__new__(metacls, name, bases, classdict)
 
     def __init__(cls, name, bases, classdict):
@@ -42,6 +43,7 @@ class MetaModel(type):
         for (key, value) in iteritems(classdict):
             if isinstance(value, TraitType):
                 value.this_class = cls
+
         super(MetaModel, cls).__init__(name, bases, classdict)
 
 class Model(py3compat.with_metaclass(MetaModel, object)):
@@ -163,10 +165,14 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
         return state
 
     @classmethod
-    def create(cls, data):
+    def create(cls, data=None):
         """
         Build an instance of this Model using the given data.
         """
+        # allow create() calls with no input
+        if not data:
+            data = {}
+
         return cls(**data)
 
     def update(self, data):
