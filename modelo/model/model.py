@@ -184,5 +184,24 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
         :param data: update the model with this data
         :type data: dict
         """
-        for (key, value) in iteritems(data):
-            pass
+        # get a dictionary of traits based on the class definition
+        traits = self.traits()
+
+        # process update data based on model traits
+        for (trait_name, trait) in iteritems(traits):
+            # skip traits that aren't going to be updated
+            if trait_name not in data.keys():
+                continue
+
+            # based on input to this function
+            given_value   = data[trait_name]
+
+            # based on the existing value on the model
+            current_value = getattr(self, trait_name)
+
+            # use this to defer assignment on to self
+            deferred_value = None
+
+            # Set the deferred_value on to the current model at the appropriate
+            # trait key (trait_name).
+            setattr(self, trait_name, deferred_value)
