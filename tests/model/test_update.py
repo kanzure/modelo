@@ -8,10 +8,18 @@ class ModelUpdateTests(unittest.TestCase):
         class Car(Model):
             number = field.Integer()
             color = field.String()
+            things = field.List()
+            numbers = field.List(field.Integer())
+            names = field.List(field.String())
+            wheels = field.List(field.Instance(Model))
 
         self.car = Car.create({
             "number": 1,
             "color": "blue",
+            "things": [1, 2, "three", 4.01],
+            "numbers": range(5),
+            "names": ["bob", "amy", "carol"],
+            "wheels": [Model.create(), Model.create()]
         })
 
     def test_update_empty(self):
@@ -33,3 +41,12 @@ class ModelUpdateTests(unittest.TestCase):
         })
 
         self.assertEqual(self.car.number, new_value)
+
+    def test_update_list_no_inner_trait(self):
+        self.car.things = ["three"]
+
+        self.car.update({
+            "things": [1, 2, 3],
+        })
+
+        self.assertTrue("three" not in self.car.things)
