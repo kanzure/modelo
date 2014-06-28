@@ -31,6 +31,13 @@ from modelo.trait.util import (
 
 from modelo.trait.trait_type import TraitType
 
+def is_trait(maybe_trait):
+    """
+    Return whether the given value is an instance or subclass of TraitType.
+    """
+    return (isinstance(maybe_trait, TraitType) or
+           (isinstance(maybe_trait, type) and issubclass(maybe_trait, TraitType)))
+
 class DefaultValueGenerator(object):
     """
     A class for generating new default value instances.
@@ -431,6 +438,9 @@ class Unicode(TraitType):
                 msg = "Could not decode {!r} for unicode trait '{}' of {} instance."
                 raise TraitError(msg.format(value, self.name, class_of(obj)))
         self.error(obj, value)
+
+# use unicode everywhere
+String = Unicode
 
 class CUnicode(Unicode):
     """A casting version of the unicode trait."""
