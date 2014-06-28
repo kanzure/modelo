@@ -199,8 +199,26 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
             # based on the existing value on the model
             current_value = getattr(self, trait_name)
 
-            # use this to defer assignment on to self
-            deferred_value = None
+            # Use this to defer assignment on to self. By default, assume it
+            # should be the new value.
+            deferred_value = given_value
+
+            # The only special cases worth handling are field.Instance,
+            # field.List and field.Dict, the other cases can probably be
+            # handled by just directly setting the value.
+            if isinstance(trait.trait_type, field.Instance):
+                # Use recursion to call the current model instance or value's
+                # update method (Model.update) with this dictionary data.
+                if isinstance(given_value, dict):
+                    current_value.update(given_value)
+                    deferred_value = current_value
+            else:
+                if isinstance(trait.trait_type, field.List):
+                    # TODO
+                    pass
+                elif isinstance(trait.trait_type, field.Dict):
+                    # TODO
+                    pass
 
             # Set the deferred_value on to the current model at the appropriate
             # trait key (trait_name).
