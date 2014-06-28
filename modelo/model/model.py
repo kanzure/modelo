@@ -4,6 +4,8 @@ import modelo.trait.py3compat as py3compat
 iteritems = py3compat.iteritems
 
 from modelo.trait.trait_type import TraitType
+import modelo.trait.trait_types as field
+
 from modelo.model.util import getmembers
 
 class MetaModel(type):
@@ -178,5 +180,9 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
     def update(self, data):
         """
         Update this model instance using the given data.
+
+        :param data: update the model with this data
+        :type data: dict
         """
-        raise NotImplementedError
+        for (key, value) in iteritems(data):
+            pass
