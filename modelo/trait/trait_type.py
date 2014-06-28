@@ -1,16 +1,7 @@
-from modelo.trait.util import class_of
-
-def repr_type(obj):
-    """
-    Return a string representation of a value and its type for readable error
-    messages.
-    """
-    the_type = type(obj)
-    if hasattr(the_type, "__name__") and the_type.__name__ == "InstanceType":
-        # old-style class
-        the_type = obj.__class__
-    msg = "%r %r".format(obj, the_type)
-    return msg
+from modelo.trait.util import (
+    class_of,
+    repr_type,
+)
 
 class NoDefaultSpecified(object):
     pass

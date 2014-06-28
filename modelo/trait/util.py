@@ -44,3 +44,15 @@ def import_item(name):
     else:
         # called with un-dotted string
         return __import__(parts[0])
+
+def repr_type(obj):
+    """
+    Return a string representation of a value and its type for readable error
+    messages.
+    """
+    the_type = type(obj)
+    if hasattr(the_type, "__name__") and the_type.__name__ == "InstanceType":
+        # old-style class
+        the_type = obj.__class__
+    msg = "%r %r" % (obj, the_type)
+    return msg
