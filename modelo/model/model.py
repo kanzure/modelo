@@ -206,17 +206,31 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
             # The only special cases worth handling are field.Instance,
             # field.List and field.Dict, the other cases can probably be
             # handled by just directly setting the value.
-            if isinstance(trait.trait_type, field.Instance):
+            if isinstance(trait, field.Instance):
                 # Use recursion to call the current model instance or value's
                 # update method (Model.update) with this dictionary data.
                 if isinstance(given_value, dict):
                     current_value.update(given_value)
                     deferred_value = current_value
             else:
-                if isinstance(trait.trait_type, field.List):
-                    # TODO
-                    pass
-                elif isinstance(trait.trait_type, field.Dict):
+                if isinstance(trait, field.List):
+                    # make a new list
+                    deferred_value = []
+
+                    # Grab the inner trait type for this list. Could be None.
+                    # This is the specific type that should be used for each of
+                    # the elements of the list. In the case of None, it may be
+                    # any value, although model instances can't be
+                    # reconstructed in that scenario.
+                    inner_trait_type = trait._trait
+
+                    # TODO: determine if inner_trait_type is a field.Instance
+                    # that says a Model must be used.
+
+                    for some_given_value in given_value:
+                        # TODO: handle model instances that need to be created
+                        deferred_value.append(some_given_value)
+                elif isinstance(trait, field.Dict):
                     # TODO
                     pass
 
