@@ -224,11 +224,23 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
                     # reconstructed in that scenario.
                     inner_trait_type = trait._trait
 
-                    # TODO: determine if inner_trait_type is a field.Instance
-                    # that says a Model must be used.
+                    # Determine if inner_trait_type is a field.Instance, and
+                    # then whether or not it is a Model.
+                    is_model = False
+                    if isinstance(inner_trait_type, TraitType) and hasattr(inner_trait_type, "klass"):
+                        if issubclass(inner_trait_type.klass, Model):
+                            is_model = True
 
+                    # Append each value to the new list. Create new model
+                    # instances if necessary.
                     for some_given_value in given_value:
-                        # TODO: handle model instances that need to be created
+                        # handle model instances that need to be created
+                        if is_model:
+                            # Can't use Model.update here because the list is
+                            # probably unordered, and updating the wrong
+                            # elements is very wrong. Another implementation
+                            # could be created for ordered collections, though.
+                            some_given_value = inner_trait_type.klass.create(**some_given_value)
                         deferred_value.append(some_given_value)
                 elif isinstance(trait, field.Dict):
                     # TODO
