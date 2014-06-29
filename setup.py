@@ -9,6 +9,12 @@ except ImportError:
 
 requires = []
 
+packages = [
+    "modelo",
+    "modelo.model",
+    "modelo.trait",
+]
+
 setup(
     name="modelo",
     version=modelo.__version__,
@@ -17,6 +23,7 @@ setup(
     author_email="kanzure@gmail.com",
     url="https://github.com/kanzure/modelo",
     install_requires=requires,
+    packages=packages,
     license="BSD",
     classifiers=(
         "Intended Audience :: Developers",
