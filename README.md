@@ -42,8 +42,11 @@ data = some_model.to_dict()
 
 # future directions
 
-* [sqlalchemy](http://sqlalchemy.org/) model translator: convert modelo models into sqlalchemy table data or declarative model classes
-* [RAML](http://raml.org/) translator
+* translators:
+* * [sqlalchemy](http://sqlalchemy.org/) model translator: convert modelo models into sqlalchemy table data or declarative model classes
+* * [RAML](http://raml.org/) translator
+* * json-schema
+* * protobufs
 
 # license
 
