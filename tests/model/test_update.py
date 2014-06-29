@@ -50,3 +50,37 @@ class ModelUpdateTests(unittest.TestCase):
         })
 
         self.assertTrue("three" not in self.car.things)
+
+    def test_update_list_integers(self):
+        self.car.numbers = range(5)
+
+        self.car.update({
+            "numbers": range(6),
+        })
+
+        self.assertNotEqual(self.car.numbers, range(5))
+        self.assertEqual(self.car.numbers, range(6))
+
+    def test_update_list_strings(self):
+        original_value = ["red", "green", "blue"]
+        new_value = ["r", "g", "b"]
+
+        self.car.names = original_value
+
+        self.car.update({
+            "names": new_value,
+        })
+
+        self.assertEqual(self.car.names, new_value)
+
+    def test_update_list_models(self):
+        original_value = []
+        new_value = [Model.create()]
+
+        self.car.wheels = original_value
+
+        self.car.update({
+            "wheels": new_value,
+        })
+
+        self.assertEqual(self.car.wheels, new_value)
