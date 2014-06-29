@@ -12,6 +12,7 @@ class ModelUpdateTests(unittest.TestCase):
             numbers = field.List(field.Integer())
             names = field.List(field.String())
             wheels = field.List(field.Instance(Model))
+            mapping = field.Dict()
 
         self.car = Car.create({
             "number": 1,
@@ -84,3 +85,18 @@ class ModelUpdateTests(unittest.TestCase):
         })
 
         self.assertEqual(self.car.wheels, new_value)
+
+    def test_update_dict_keys_are_different(self):
+        self.car.mapping = {
+            "hello": "world",
+        }
+
+        original_keys = self.car.mapping.keys()
+
+        self.car.update({
+            "mapping": {
+                "future": "world",
+            },
+        })
+
+        self.assertNotEqual(original_keys, self.car.mapping.keys())
