@@ -1,5 +1,10 @@
 import inspect
 
+from copy import (
+    copy,
+    deepcopy,
+)
+
 import modelo.trait.py3compat as py3compat
 iteritems = py3compat.iteritems
 
@@ -118,6 +123,40 @@ class Model(py3compat.with_metaclass(MetaModel, object)):
         members = [member for member in getmembers(self.__class__) if isinstance(member[1], TraitType)]
         traits = dict(members)
         return traits
+
+    def __copy__(self):
+        """
+        Create a new instance of this model. The trait values on this new
+        instance will be the same values as on the original instance, with the
+        exception of immutable types like integers.
+        """
+        trait_data = self.__getstate__()
+        inst = self.__class__.create(trait_data)
+        return inst
+
+    def __deepcopy__(self, memo):
+        """
+        Create a new instance of this model. The trait values on this new
+        instance will be created by deepcopying the original trait values from
+        the original instance.
+        """
+        # insert self into memo
+        inst = self.__class__.__new__(self.__class__)
+        memo[id(self)] = inst
+
+        # data is later passed into the create method for this class
+        data = {}
+
+        # get current values
+        trait_data = self.__getstate__()
+
+        for (trait_name, value) in trait_data.iteritems():
+            data[trait_name] = deepcopy(value, memo)
+
+        # data is prepared and ready for __init__
+        self.__class__.__init__(inst, **data)
+
+        return inst
 
     def __getstate__(self):
         """
